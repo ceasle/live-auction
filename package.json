@@ -1,0 +1,36 @@
+{
+  "name": "live-auction",
+  "version": "1.0.0",
+  "main": "src/index.tsx",
+  "dependencies": {
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
+    "react-scripts": "4.0.3"
+  },
+  "devDependencies": {
+    "@types/react": "18.0.0",
+    "@types/react-dom": "18.0.0",
+    "typescript": "4.4.2"
+  },
+  "scripts": {
+    "start": "rm -rf dist && react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "release": "npm run tsc && npm run start",
+    "clean": "rm -rf node_modules dist",
+    "eject": "react-scripts eject",
+    "tsc": "tsc"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
