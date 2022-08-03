@@ -1,5 +1,4 @@
 import "./styles.css";
-import { getdata } from "./service";
 import axios from "axios";
 
 function a():any {
