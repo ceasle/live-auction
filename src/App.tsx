@@ -2,25 +2,15 @@ import "./styles.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const axiosConfig = {
-  headers: {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-  },
-};
-
 export default function App() {
   const [isLoading, setLoadingData] = useState<boolean>(true);
   const [data, setData] = useState<string>("");
 
   useEffect(() => {
-    axios
-      .get("https://auction36.herokuapp.com/", axiosConfig)
-      .then((Response) => {
-        console.log("sujith", Response.data);
-        setData(Response.data);
-        setLoadingData(false);
-      });
+    axios.get("https://auction36.herokuapp.com/").then((Response) => {
+      setData(Response.data);
+      setLoadingData(false);
+    });
   }, []);
 
   return (
