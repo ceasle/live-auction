@@ -10,21 +10,29 @@ const axiosConfig = {
 };
 
 export default function App() {
-  const [data, setData] = useState("");
+  const [isLoading, setLoadingData] = useState<boolean>(true);
+  const [data, setData] = useState<string>("");
 
   useEffect(() => {
     axios
-      .get("https://infinite-escarpment-04245.herokuapp.com/", axiosConfig)
+      .get("https://auction36.herokuapp.com/", axiosConfig)
       .then((Response) => {
         console.log("sujith", Response.data);
         setData(Response.data);
+        setLoadingData(false);
       });
   }, []);
 
   return (
     <div className="App">
-      <h1>{data}</h1>
-      <h2>Start editing to see some magic happen!</h2>
+      {isLoading ? (
+        <h1>Loading...</h1>
+      ) : (
+        <div>
+          <h1>{data}</h1>
+          <h2>Start editing to see some magic happen!</h2>
+        </div>
+      )}
     </div>
   );
 }
