@@ -7,7 +7,7 @@ export default function App() {
   const [data, setData] = useState<string>("");
 
   useEffect(() => {
-    axios.get("https://auction36.herokuapp.com/").then((Response) => {
+    axios.get("http://localhost:8080/").then((Response) => {
       setData(Response.data);
       setLoadingData(false);
     });
