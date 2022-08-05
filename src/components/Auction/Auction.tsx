@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { AUCTION_PAGE_URL } from "../../constants/apiUrls";
-import { Loading } from "../shared/Loading";
+import { Loading } from "../shared/Loading/Loading";
 
 export const Auction = () => {
   const [data, setData] = useState<String>("");
