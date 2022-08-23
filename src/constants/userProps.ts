@@ -7,14 +7,14 @@ export type UserProps = {
 export type AuctionProps = {
   name: string;
   description: string;
-  auctionId: number;
+  // auctionId: number;
   items: ItemProps[];
 };
 
 export type ItemProps = {
   name: string;
   description: string;
-  itemId: number;
+  // itemId: number;
   basePrice: number;
   // TODO: Add image to item
 };
@@ -22,8 +22,14 @@ export type ItemProps = {
 export const defaultAuction = {
   name: "Auction1",
   description: "XYZ",
-  auctionId: 12345,
-  items: [],
+  // auctionId: 12345,
+  items: [
+    {
+      name: "item1",
+      description: "ABC",
+      basePrice: 10,
+    },
+  ],
 };
 
 export const defaultUserProps = {
