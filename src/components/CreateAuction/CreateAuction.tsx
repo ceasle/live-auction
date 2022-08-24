@@ -4,10 +4,8 @@ import { useState } from "react";
 import { CREATE_PAGE_URL } from "../../constants/apiUrls";
 import { Loading } from "../shared/Loading/Loading";
 import * as Yup from "yup";
-import { AuctionProps } from "../../constants/userProps";
 
 export const CreateAuction = () => {
-  const [data, setData] = useState<AuctionProps | null>(null);
   const [isLoading, setLoadingData] = useState<boolean>(false);
 
   const emptyItem = {
@@ -25,7 +23,7 @@ export const CreateAuction = () => {
           initialValues={{
             auctionName: "",
             auctionDescription: "",
-            items: [],
+            items: [emptyItem],
           }}
           validationSchema={Yup.object({
             auctionName: Yup.string()
@@ -56,30 +54,25 @@ export const CreateAuction = () => {
             // setData(values);
             axios
               .post(CREATE_PAGE_URL, {
-                id: 1,
-                name: "ABC",
-                description: "XYZ",
-                items: [
-                  {
-                    id: 1,
-                    name: "Pen",
-                    description: "XYZ",
-                    basePrice: 10,
-                  },
-                  {
-                    id: 2,
-                    name: "Book",
-                    description: "XYZ",
-                    basePrice: 20,
-                  },
-                ],
+                name: values.auctionName,
+                description: values.auctionDescription,
+                items: values.items.map((item) => ({
+                  name: item.itemName,
+                  description: item.itemDescription,
+                  basePrice: item.itemBasePrice,
+                })),
               })
               .then((response) => {
-                setData(response.data);
+                // TODO: Add success message pop up
+                alert("success");
+                console.log(response);
                 setLoadingData(false);
-                setTimeout(() => {
-                  alert(JSON.stringify(values, null, 2));
-                }, 500);
+              })
+              .catch((err) => {
+                // TODO: Add failure message pop up
+                alert("failure");
+                console.log(err);
+                setLoadingData(false);
               });
           }}
           render={({ values }) => (
@@ -123,23 +116,13 @@ export const CreateAuction = () => {
 
                           <button
                             type="button"
-                            onClick={() => {
-                              if (values.items.length == 1) {
-                                alert(
-                                  "There should be at least 1 item in the auction"
-                                );
-                                return;
-                              }
-                              arrayHelpers.remove(index);
-                            }}
+                            onClick={() => arrayHelpers.remove(index)}
                           >
                             -
                           </button>
                           <button
                             type="button"
-                            onClick={() => {
-                              arrayHelpers.insert(index, emptyItem);
-                            }}
+                            onClick={() => arrayHelpers.push(emptyItem)}
                           >
                             +
                           </button>
