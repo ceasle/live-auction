@@ -1,0 +1,12 @@
+.home {
+  height: 85vh;
+  background-position: center;
+  background-color: black;
+}
+
+.form {
+  color: white;
+  position: relative;
+  top: 40%;
+  left: 10%;
+}
