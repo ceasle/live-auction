@@ -77,13 +77,11 @@ export const Default = () => {
             .then((response) => {
               // TODO: complete here
               alert("success");
-              console.log(response);
               // setLoadingData(false);
             })
             .catch((error) => {
               // TODO: complete here
               alert("failure");
-              console.log(error);
               // setLoadingData(false);
             });
         }}

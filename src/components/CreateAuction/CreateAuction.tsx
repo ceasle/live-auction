@@ -1,12 +1,18 @@
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CREATE_PAGE_URL } from "../../constants/apiUrls";
 import { Loading } from "../shared/Loading/Loading";
 import * as Yup from "yup";
+import { isAuthenticated } from "../../utils/APIutils";
+import { Unauthorised } from "../shared/Unauthorised/Unauthorised";
 
 export const CreateAuction = () => {
   const [isLoading, setLoadingData] = useState<boolean>(false);
+
+  if (isAuthenticated() === false) {
+    return <Unauthorised />;
+  }
 
   const emptyItem = {
     itemName: "",
