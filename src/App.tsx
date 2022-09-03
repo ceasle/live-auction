@@ -5,6 +5,7 @@ import { CreateAuction } from "./components/CreateAuction/CreateAuction";
 import { Auction } from "./components/Auction/Auction";
 import { Default } from "./components/Default/Default";
 import { Loading } from "./components/shared/Loading/Loading";
+import { Login } from "./components/Login/Login";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/create" element={<CreateAuction />} />
         <Route path="/auction" element={<Auction />} />
+        <Route path="/login" element={<Login />} />
         {/* Add Testing UI component to this route 
             Remove the route before prod */}
         <Route path="/test" element={<Loading />} />

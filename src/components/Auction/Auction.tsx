@@ -8,10 +8,16 @@ export const Auction = () => {
   const [isLoading, setLoadingData] = useState<boolean>(true);
 
   useEffect(() => {
-    axios.get(AUCTION_PAGE_URL).then((response) => {
-      setData(response.data);
-      setLoadingData(false);
-    });
+    axios
+      .get(AUCTION_PAGE_URL, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("ACCESS_TOKEN"),
+        },
+      })
+      .then((response) => {
+        setData(response.data);
+        setLoadingData(false);
+      });
   }, []);
 
   return <>{isLoading ? <Loading /> : <div>{data}</div>}</>;

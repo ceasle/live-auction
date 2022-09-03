@@ -8,3 +8,4 @@ export const DEFAULT_PAGE_URL = BASE_PAGE_URL + "/";
 export const HOME_PAGE_URL = BASE_PAGE_URL + "/home";
 export const CREATE_PAGE_URL = BASE_PAGE_URL + "/create";
 export const AUCTION_PAGE_URL = BASE_PAGE_URL + "/auction";
+export const LOGIN_PAGE_URL = BASE_PAGE_URL + "/login";
