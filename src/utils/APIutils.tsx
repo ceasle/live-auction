@@ -4,7 +4,7 @@ import Cryptr from "cryptr";
 export const isAuthenticated = () => {
   return (
     JSON.parse(getItem("ACCESS_TOKEN_EXPIRATION") ?? "0") > Date.now() &&
-    getItem("ACCESS_TOKEN")
+    localStorage.getItem("ACCESS_TOKEN")
   );
 };
 
@@ -24,6 +24,7 @@ export const setItem = (key: string, value: string) => {
 
 export const getItem = (key: string) => {
   const EncryptedToken = localStorage.getItem(key);
+  if (EncryptedToken === null) return null;
   const DecryptedToken = cryptr.decrypt(EncryptedToken ?? "");
-  return DecryptedToken;
+  return DecryptedToken ?? "";
 };
