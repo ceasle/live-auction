@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { AUCTION_PAGE_URL } from "../../constants/apiUrls";
+import { getItem } from "../../utils/APIutils";
 import { Loading } from "../shared/Loading/Loading";
 
 export const Auction = () => {
@@ -11,7 +12,7 @@ export const Auction = () => {
     axios
       .get(AUCTION_PAGE_URL, {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("ACCESS_TOKEN"),
+          Authorization: "Bearer " + getItem("ACCESS_TOKEN"),
         },
       })
       .then((response) => {

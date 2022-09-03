@@ -8,6 +8,11 @@ import { Loading } from "./components/shared/Loading/Loading";
 import { Login } from "./components/Login/Login";
 
 export default function App() {
+  if (process.env.NODE_ENV !== "production") {
+    require("dotenv");
+    require("fs");
+  }
+
   return (
     <Router>
       <Routes>

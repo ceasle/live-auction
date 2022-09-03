@@ -3,6 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { LOGIN_PAGE_URL } from "../../constants/apiUrls";
+import { setItem } from "../../utils/APIutils";
 
 export const Login = () => {
   let navigate = useNavigate();
@@ -26,10 +27,10 @@ export const Login = () => {
             .then((response) => {
               alert("success");
               if (response.status === 200) {
-                localStorage.setItem("ACCESS_TOKEN", response.data.token);
-                localStorage.setItem(
+                setItem("ACCESS_TOKEN", response.data.token); //add to local storage
+                setItem(
                   "ACCESS_TOKEN_EXPIRATION",
-                  JSON.stringify(Date.now() + 5 * 60 * 60 * 1000)
+                  JSON.stringify(Date.now() + 5 * 60 * 60 * 1000) //add to  local storage
                 );
                 navigate("/auction");
               }
