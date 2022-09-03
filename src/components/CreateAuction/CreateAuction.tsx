@@ -6,6 +6,10 @@ import { Loading } from "../shared/Loading/Loading";
 import * as Yup from "yup";
 import { isAuthenticated } from "../../utils/APIutils";
 import { Unauthorized } from "../shared/Unauthorized/Unauthorized";
+import { TextField } from "formik-mui";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateTimePicker as formikDateTimePicker } from "formik-mui-x-date-pickers";
 
 export const CreateAuction = () => {
   const [isLoading, setLoadingData] = useState<boolean>(false);
@@ -31,6 +35,7 @@ export const CreateAuction = () => {
             auctionDescription: "",
             items: [emptyItem],
             invitees: [""],
+            auctionDateTime: null,
           }}
           validationSchema={Yup.object({
             auctionName: Yup.string()
@@ -59,6 +64,7 @@ export const CreateAuction = () => {
               .of(Yup.string().email().required("Required"))
               .min(1, "At least 1 invitee should be present at the auction")
               .required("Required"),
+            auctionDateTime: Yup.date().required("Required"),
           })}
           onSubmit={(values) => {
             setLoadingData(true);
@@ -81,6 +87,7 @@ export const CreateAuction = () => {
               .catch((err) => {
                 // TODO: Add failure message pop up
                 alert("failure");
+                console.log(values);
                 console.log(err);
                 setLoadingData(false);
               });
@@ -88,12 +95,14 @@ export const CreateAuction = () => {
           render={({ values }) => (
             <Form>
               <label htmlFor="auctionName">Auction Name</label>
-              <Field name="auctionName" type="text" />
-              <ErrorMessage name="auctionName" />
+              <Field component={TextField} name="auctionName" type="text" />
 
               <label htmlFor="auctionDescription">Auction Description</label>
-              <Field name="auctionDescription" type="text" />
-              <ErrorMessage name="auctionDescription" />
+              <Field
+                component={TextField}
+                name="auctionDescription"
+                type="text"
+              />
 
               <FieldArray
                 name="items"
@@ -105,22 +114,26 @@ export const CreateAuction = () => {
                           <label htmlFor={`items.${index}.itemName`}>
                             Item Name
                           </label>
-                          <Field name={`items.${index}.itemName`} />
-                          <ErrorMessage name={`items.${index}.itemName`} />
+                          <Field
+                            component={TextField}
+                            name={`items.${index}.itemName`}
+                          />
 
                           <label htmlFor={`items.${index}.itemDescription`}>
                             Item Description
                           </label>
-                          <Field name={`items.${index}.itemDescription`} />
-                          <ErrorMessage
+                          <Field
+                            component={TextField}
                             name={`items.${index}.itemDescription`}
                           />
 
                           <label htmlFor={`items.${index}.itemBasePrice`}>
                             Item Base Price
                           </label>
-                          <Field name={`items.${index}.itemBasePrice`} />
-                          <ErrorMessage name={`items.${index}.itemBasePrice`} />
+                          <Field
+                            component={TextField}
+                            name={`items.${index}.itemBasePrice`}
+                          />
 
                           {/* TODO: Add field for image */}
 
@@ -164,8 +177,10 @@ export const CreateAuction = () => {
                           <label htmlFor={`invitees.${index}`}>
                             Email of the invitee
                           </label>
-                          <Field name={`invitees.${index}`} />
-                          <ErrorMessage name={`invitees.${index}`} />
+                          <Field
+                            component={TextField}
+                            name={`invitees.${index}`}
+                          />
                           <button
                             type="button"
                             onClick={() => arrayHelpers.remove(index)}
@@ -195,7 +210,17 @@ export const CreateAuction = () => {
                   </>
                 )}
               />
-
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <Field
+                  component={formikDateTimePicker}
+                  label="Date & Time picker"
+                  name="auctionDateTime"
+                  textField={{
+                    helperText: "Enter date and time to host the auction",
+                  }}
+                  inputFormat="DD/MM/YYYY HH:mm"
+                />
+              </LocalizationProvider>
               <button type="submit">Submit</button>
             </Form>
           )}
