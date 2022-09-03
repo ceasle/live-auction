@@ -24,7 +24,9 @@ export const setItem = (key: string, value: string) => {
 
 export const getItem = (key: string) => {
   const EncryptedToken = localStorage.getItem(key);
-  if (EncryptedToken === null) return null;
+  if (EncryptedToken === null) {
+    return null;
+  }
   const DecryptedToken = cryptr.decrypt(EncryptedToken ?? "");
   return DecryptedToken ?? "";
 };

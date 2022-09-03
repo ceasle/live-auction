@@ -1,4 +1,4 @@
-export const Unauthorised = () => {
+export const Unauthorized = () => {
   return (
     <div>
       <h1>403 Forbidden Error</h1>

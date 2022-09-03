@@ -1,17 +1,17 @@
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CREATE_PAGE_URL } from "../../constants/apiUrls";
 import { Loading } from "../shared/Loading/Loading";
 import * as Yup from "yup";
 import { isAuthenticated } from "../../utils/APIutils";
-import { Unauthorised } from "../shared/Unauthorised/Unauthorised";
+import { Unauthorized } from "../shared/Unauthorized/Unauthorized";
 
 export const CreateAuction = () => {
   const [isLoading, setLoadingData] = useState<boolean>(false);
 
   if (isAuthenticated() === false) {
-    return <Unauthorised />;
+    return <Unauthorized />;
   }
 
   const emptyItem = {
@@ -30,6 +30,7 @@ export const CreateAuction = () => {
             auctionName: "",
             auctionDescription: "",
             items: [emptyItem],
+            invitees: [""],
           }}
           validationSchema={Yup.object({
             auctionName: Yup.string()
@@ -54,10 +55,13 @@ export const CreateAuction = () => {
               )
               .min(1, "At least 1 item should be presented at the auction")
               .required("Required"),
+            invitees: Yup.array()
+              .of(Yup.string().email().required("Required"))
+              .min(1, "At least 1 invitee should be present at the auction")
+              .required("Required"),
           })}
           onSubmit={(values) => {
             setLoadingData(true);
-            // setData(values);
             axios
               .post(CREATE_PAGE_URL, {
                 name: values.auctionName,
@@ -96,7 +100,7 @@ export const CreateAuction = () => {
                 render={(arrayHelpers) => (
                   <div>
                     {values.items && values.items.length > 0 ? (
-                      values.items.map((item, index) => (
+                      values.items.map((_, index) => (
                         <div key={index}>
                           <label htmlFor={`items.${index}.itemName`}>
                             Item Name
@@ -129,8 +133,9 @@ export const CreateAuction = () => {
                           <button
                             type="button"
                             onClick={() => arrayHelpers.push(emptyItem)}
+                            hidden={values.items.length != index + 1}
                           >
-                            +
+                            Add Item
                           </button>
                         </div>
                       ))
@@ -146,6 +151,48 @@ export const CreateAuction = () => {
                       </>
                     )}
                   </div>
+                )}
+              />
+
+              <FieldArray
+                name="invitees"
+                render={(arrayHelpers) => (
+                  <>
+                    {values.invitees && values.invitees.length > 0 ? (
+                      values.invitees.map((_, index) => (
+                        <div key={index}>
+                          <label htmlFor={`invitees.${index}`}>
+                            Email of the invitee
+                          </label>
+                          <Field name={`invitees.${index}`} />
+                          <ErrorMessage name={`invitees.${index}`} />
+                          <button
+                            type="button"
+                            onClick={() => arrayHelpers.remove(index)}
+                          >
+                            -
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => arrayHelpers.push("")}
+                            hidden={values.invitees.length != index + 1}
+                          >
+                            Add Invitee
+                          </button>
+                        </div>
+                      ))
+                    ) : (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => arrayHelpers.push("")}
+                        >
+                          Add Invitee
+                        </button>
+                        <ErrorMessage name="invitees" />
+                      </>
+                    )}
+                  </>
                 )}
               />
 
