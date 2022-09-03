@@ -28,5 +28,5 @@ export const getItem = (key: string) => {
     return null;
   }
   const DecryptedToken = cryptr.decrypt(EncryptedToken ?? "");
-  return DecryptedToken ?? "";
+  return DecryptedToken;
 };
