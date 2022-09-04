@@ -10,6 +10,8 @@ import { TextField } from "formik-mui";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker as formikDateTimePicker } from "formik-mui-x-date-pickers";
+import { Grid, Button } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export const CreateAuction = () => {
   const [isLoading, setLoadingData] = useState<boolean>(false);
@@ -51,7 +53,7 @@ export const CreateAuction = () => {
                     .max(15, "Must be 15 characters or less")
                     .required("Required"),
                   itemDescription: Yup.string()
-                    .max(20, "Must be 20 characters or less")
+                    .max(400, "Must be 400 characters or less")
                     .required("Required"),
                   itemBasePrice: Yup.number()
                     .min(1, "Must be greater than 0")
@@ -94,16 +96,34 @@ export const CreateAuction = () => {
           }}
           render={({ values }) => (
             <Form>
-              <label htmlFor="auctionName">Auction Name</label>
-              <Field component={TextField} name="auctionName" type="text" />
-
-              <label htmlFor="auctionDescription">Auction Description</label>
-              <Field
-                component={TextField}
-                name="auctionDescription"
-                type="text"
-              />
-
+              <Grid
+                container
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                columnSpacing={4}
+                rowSpacing={2}
+              >
+                <Grid item xs={8}>
+                  <Field
+                    component={TextField}
+                    name="auctionName"
+                    label="Auction Name"
+                    type="text"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={8}>
+                  <Field
+                    component={TextField}
+                    name="auctionDescription"
+                    label="Auction Description"
+                    type="text"
+                    fullWidth
+                    multiline
+                  />
+                </Grid>
+              </Grid>
               <FieldArray
                 name="items"
                 render={(arrayHelpers) => (
@@ -111,57 +131,87 @@ export const CreateAuction = () => {
                     {values.items && values.items.length > 0 ? (
                       values.items.map((_, index) => (
                         <div key={index}>
-                          <label htmlFor={`items.${index}.itemName`}>
-                            Item Name
-                          </label>
-                          <Field
-                            component={TextField}
-                            name={`items.${index}.itemName`}
-                          />
-
-                          <label htmlFor={`items.${index}.itemDescription`}>
-                            Item Description
-                          </label>
-                          <Field
-                            component={TextField}
-                            name={`items.${index}.itemDescription`}
-                          />
-
-                          <label htmlFor={`items.${index}.itemBasePrice`}>
-                            Item Base Price
-                          </label>
-                          <Field
-                            component={TextField}
-                            name={`items.${index}.itemBasePrice`}
-                          />
+                          <Grid
+                            container
+                            direction="row"
+                            justifyContent="center"
+                            alignItems="center"
+                            columnSpacing={2}
+                            rowSpacing={2}
+                          >
+                            <Grid item xs={2}>
+                              <Field
+                                component={TextField}
+                                name={`items.${index}.itemName`}
+                                label="Item Name"
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item xs={4}>
+                              <Field
+                                component={TextField}
+                                name={`items.${index}.itemDescription`}
+                                label="Item Description"
+                                fullWidth
+                                multiline
+                              />
+                            </Grid>
+                            <Grid item xs={2}>
+                              <Field
+                                component={TextField}
+                                name={`items.${index}.itemBasePrice`}
+                                label="Item Base Price"
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Button
+                                type="button"
+                                onClick={() => arrayHelpers.remove(index)}
+                                variant="outlined"
+                                startIcon={<DeleteIcon />}
+                                size="large"
+                              >
+                                Remove Item
+                              </Button>
+                            </Grid>
+                          </Grid>
 
                           {/* TODO: Add field for image */}
 
-                          <button
-                            type="button"
-                            onClick={() => arrayHelpers.remove(index)}
+                          <Grid
+                            container
+                            direction="row"
+                            justifyContent="flex-end"
                           >
-                            -
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => arrayHelpers.push(emptyItem)}
-                            hidden={values.items.length != index + 1}
-                          >
-                            Add Item
-                          </button>
+                            <Grid item>
+                              <Button
+                                type="button"
+                                onClick={() => arrayHelpers.push(emptyItem)}
+                                hidden={values.items.length != index + 1}
+                                variant="contained"
+                                size="large"
+                              >
+                                Add Item
+                              </Button>
+                            </Grid>
+                          </Grid>
                         </div>
                       ))
                     ) : (
-                      <>
-                        <button
-                          type="button"
-                          onClick={() => arrayHelpers.push(emptyItem)}
-                        >
-                          Add Item
-                        </button>
-                        <ErrorMessage name="items" />
-                      </>
+                      <Grid container direction="row" justifyContent="flex-end">
+                        <Grid item>
+                          <Button
+                            type="button"
+                            onClick={() => arrayHelpers.push(emptyItem)}
+                            variant="contained"
+                            size="large"
+                          >
+                            Add Item
+                          </Button>
+                          <ErrorMessage name="items" />
+                        </Grid>
+                      </Grid>
                     )}
                   </div>
                 )}
@@ -174,54 +224,92 @@ export const CreateAuction = () => {
                     {values.invitees && values.invitees.length > 0 ? (
                       values.invitees.map((_, index) => (
                         <div key={index}>
-                          <label htmlFor={`invitees.${index}`}>
-                            Email of the invitee
-                          </label>
-                          <Field
-                            component={TextField}
-                            name={`invitees.${index}`}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => arrayHelpers.remove(index)}
+                          <Grid
+                            container
+                            direction="row"
+                            justifyContent="center"
+                            alignItems="center"
+                            columnSpacing={1}
+                            rowSpacing={2}
                           >
-                            -
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => arrayHelpers.push("")}
-                            hidden={values.invitees.length != index + 1}
-                          >
-                            Add Invitee
-                          </button>
+                            <Grid item xs={3}>
+                              <Field
+                                component={TextField}
+                                name={`invitees.${index}`}
+                                label="Attendee Email"
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item>
+                              <Button
+                                type="button"
+                                onClick={() => arrayHelpers.remove(index)}
+                                variant="outlined"
+                                size="large"
+                                startIcon={<DeleteIcon />}
+                              >
+                                Remove Attendee
+                              </Button>
+                            </Grid>
+                            <Grid item>
+                              <Button
+                                type="button"
+                                onClick={() => arrayHelpers.push("")}
+                                hidden={values.invitees.length != index + 1}
+                                variant="contained"
+                                size="large"
+                              >
+                                Add Attendee
+                              </Button>
+                            </Grid>
+                          </Grid>
                         </div>
                       ))
                     ) : (
-                      <>
-                        <button
-                          type="button"
-                          onClick={() => arrayHelpers.push("")}
-                        >
-                          Add Invitee
-                        </button>
-                        <ErrorMessage name="invitees" />
-                      </>
+                      <Grid container direction="row" justifyContent="flex-end">
+                        <Grid item>
+                          <Button
+                            type="button"
+                            onClick={() => arrayHelpers.push("")}
+                            variant="contained"
+                            size="large"
+                          >
+                            Add Attendee
+                          </Button>
+                          <ErrorMessage name="invitees" />
+                        </Grid>
+                      </Grid>
                     )}
                   </>
                 )}
               />
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Field
-                  component={formikDateTimePicker}
-                  label="Date & Time picker"
-                  name="auctionDateTime"
-                  textField={{
-                    helperText: "Enter date and time to host the auction",
-                  }}
-                  inputFormat="DD/MM/YYYY HH:mm"
-                />
-              </LocalizationProvider>
-              <button type="submit">Submit</button>
+              <Grid
+                container
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                columnSpacing={1}
+                rowSpacing={2}
+              >
+                <Grid item>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <Field
+                      component={formikDateTimePicker}
+                      label="Auction Date & Time"
+                      name="auctionDateTime"
+                      textField={{
+                        helperText: "Enter date and time to host the auction",
+                      }}
+                      inputFormat="DD/MM/YYYY HH:mm"
+                    />
+                  </LocalizationProvider>
+                </Grid>
+                <Grid item xs={2}>
+                  <Button type="submit" variant="contained" size="large">
+                    Submit
+                  </Button>
+                </Grid>
+              </Grid>
             </Form>
           )}
         />
