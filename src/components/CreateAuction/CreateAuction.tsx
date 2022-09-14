@@ -1,23 +1,34 @@
 import axios from "axios";
-import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
+import { Formik, Form, FastField, ErrorMessage, FieldArray } from "formik";
 import { useState } from "react";
 import { CREATE_PAGE_URL } from "../../constants/apiUrls";
 import { Loading } from "../shared/Loading/Loading";
 import * as Yup from "yup";
 import { isAuthenticated } from "../../utils/APIutils";
-import { Unauthorized } from "../shared/Unauthorized/Unauthorized";
 import { TextField } from "formik-mui";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker as formikDateTimePicker } from "formik-mui-x-date-pickers";
 import { Grid, Button, Paper } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { CustomAlert } from "../shared/CustomAlert/CustomAlert";
 
 export const CreateAuction = () => {
   const [isLoading, setLoadingData] = useState<boolean>(false);
+  const [successSubmission, setSuccessSubmission] = useState<boolean>(false);
+  const [failureSubmission, setFailureSubmission] = useState<boolean>(false);
 
   // if (isAuthenticated() === false) {
-  //   return <Unauthorized />;
+  //   return (
+  //     <CustomAlert
+  //       severity="error"
+  //       title="Error!"
+  //       message="Unauthorized error"
+  //       note="Try logging in"
+  //       buttonText="Login"
+  //       redirectUrl="/login"
+  //     />
+  //   );
   // }
 
   const emptyItem = {
@@ -30,6 +41,20 @@ export const CreateAuction = () => {
     <>
       {isLoading ? (
         <Loading />
+      ) : successSubmission ? (
+        <CustomAlert
+          severity="success"
+          title="Hurray!"
+          message="We have successfully received your data"
+          note="Thank you!"
+        />
+      ) : failureSubmission ? (
+        <CustomAlert
+          severity="error"
+          title="Oh Snap!"
+          message="An error occurred while submitting your data"
+          buttonText="Try Again"
+        />
       ) : (
         <Formik
           initialValues={{
@@ -37,7 +62,7 @@ export const CreateAuction = () => {
             auctionDescription: "",
             items: [emptyItem],
             invitees: [""],
-            auctionDateTime: null,
+            auctionDateTime: "",
           }}
           validationSchema={Yup.object({
             auctionName: Yup.string()
@@ -66,7 +91,7 @@ export const CreateAuction = () => {
               .of(Yup.string().email().required("Required"))
               .min(1, "At least 1 invitee should be present at the auction")
               .required("Required"),
-            auctionDateTime: Yup.date().required("Required"),
+            auctionDateTime: Yup.string().required("Required"),
           })}
           onSubmit={(values) => {
             setLoadingData(true);
@@ -82,16 +107,16 @@ export const CreateAuction = () => {
               })
               .then((response) => {
                 // TODO: Add success message pop up
-                alert("success");
                 console.log(response);
                 setLoadingData(false);
+                setSuccessSubmission(true);
               })
               .catch((err) => {
                 // TODO: Add failure message pop up
-                alert("failure");
                 console.log(values);
                 console.log(err);
                 setLoadingData(false);
+                setFailureSubmission(true);
               });
           }}
           render={({ values }) => (
@@ -105,7 +130,7 @@ export const CreateAuction = () => {
                   rowSpacing={2}
                 >
                   <Grid item xs={12}>
-                    <Field
+                    <FastField
                       component={TextField}
                       name="auctionName"
                       label="Auction Name"
@@ -114,7 +139,7 @@ export const CreateAuction = () => {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <Field
+                    <FastField
                       component={TextField}
                       name="auctionDescription"
                       label="Auction Description"
@@ -137,7 +162,7 @@ export const CreateAuction = () => {
                                   style={{ margin: 16 }}
                                 >
                                   <Grid item xs={2}>
-                                    <Field
+                                    <FastField
                                       component={TextField}
                                       name={`items.${index}.itemName`}
                                       label="Item Name"
@@ -145,7 +170,7 @@ export const CreateAuction = () => {
                                     />
                                   </Grid>
                                   <Grid item xs={4}>
-                                    <Field
+                                    <FastField
                                       component={TextField}
                                       name={`items.${index}.itemDescription`}
                                       label="Item Description"
@@ -154,7 +179,7 @@ export const CreateAuction = () => {
                                     />
                                   </Grid>
                                   <Grid item xs={2}>
-                                    <Field
+                                    <FastField
                                       component={TextField}
                                       name={`items.${index}.itemBasePrice`}
                                       label="Item Base Price"
@@ -223,7 +248,7 @@ export const CreateAuction = () => {
                                   style={{ margin: 16 }}
                                 >
                                   <Grid item xs={3}>
-                                    <Field
+                                    <FastField
                                       component={TextField}
                                       name={`invitees.${index}`}
                                       label="Attendee Email"
@@ -276,7 +301,7 @@ export const CreateAuction = () => {
                   </Grid>
                   <Grid item>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <Field
+                      <FastField
                         component={formikDateTimePicker}
                         label="Auction Date & Time"
                         name="auctionDateTime"

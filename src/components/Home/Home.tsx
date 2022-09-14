@@ -3,15 +3,24 @@ import { useEffect, useState } from "react";
 import { HOME_PAGE_URL } from "../../constants/apiUrls";
 import { defaultUserProps, UserProps } from "../../constants/userProps";
 import { isAuthenticated } from "../../utils/APIutils";
+import { CustomAlert } from "../shared/CustomAlert/CustomAlert";
 import { Loading } from "../shared/Loading/Loading";
-import { Unauthorized } from "../shared/Unauthorized/Unauthorized";
 
 export const Home = () => {
   const [data, setData] = useState<UserProps>(defaultUserProps);
   const [isLoading, setLoadingData] = useState<boolean>(true);
 
   if (isAuthenticated() === false) {
-    return <Unauthorized />;
+    return (
+      <CustomAlert
+        severity="error"
+        title="Error!"
+        message="Unauthorized error"
+        note="Try logging in"
+        buttonText="Login"
+        redirectionUrl="/login"
+      />
+    );
   }
 
   useEffect(() => {
