@@ -18,18 +18,18 @@ export const CreateAuction = () => {
   const [successSubmission, setSuccessSubmission] = useState<boolean>(false);
   const [failureSubmission, setFailureSubmission] = useState<boolean>(false);
 
-  // if (isAuthenticated() === false) {
-  //   return (
-  //     <CustomAlert
-  //       severity="error"
-  //       title="Error!"
-  //       message="Unauthorized error"
-  //       note="Try logging in"
-  //       buttonText="Login"
-  //       redirectUrl="/login"
-  //     />
-  //   );
-  // }
+  if (isAuthenticated() === false) {
+    return (
+      <CustomAlert
+        severity="error"
+        title="Error!"
+        message="Unauthorized error"
+        note="Try logging in"
+        buttonText="Login"
+        redirectionUrl="/login"
+      />
+    );
+  }
 
   const emptyItem = {
     itemName: "",
